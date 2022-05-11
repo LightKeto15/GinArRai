@@ -1,18 +1,19 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
+import {Controller, useForm} from 'react-hook-form';
 import {Button, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {AuthRootStackParamList} from '../navigation/AuthStack';
 import {AppContext} from '../provider/AppProvider';
+type SignUpNavProp = NavigationProp<AuthRootStackParamList, 'SignIn'>;
 
-import {useForm, Controller} from 'react-hook-form';
-
-type SignInNavProp = NavigationProp<AuthRootStackParamList, 'SignIn'>;
 type FormType = {
   email: string;
   password: string;
+  rePassword: string;
 };
-function SignIn() {
-  const navigator = useNavigation<SignInNavProp>();
+
+function SignUp() {
+  const navigator = useNavigation<SignUpNavProp>();
   const appContext = useContext(AppContext);
   const {
     control,
@@ -22,13 +23,16 @@ function SignIn() {
     defaultValues: {
       email: '',
       password: '',
+      rePassword: '',
     },
   });
   const onSubmit = (data: FormType) =>
-    appContext?.SignIn(data.email, data.password);
-
+    appContext!.SignUp(data.email, data.password);
   return (
-    <View style={{justifyContent: 'center'}}>
+    <View>
+      <TouchableOpacity onPress={() => navigator.goBack()}>
+        <Text>Back</Text>
+      </TouchableOpacity>
       <Controller
         control={control}
         rules={{
@@ -52,23 +56,24 @@ function SignIn() {
         )}
         name="password"
       />
-      {errors.password ? <Text>{errors.password.type}</Text> : null}
-      <Button title="Sign In" onPress={handleSubmit<FormType>(onSubmit)} />
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Text>Does not have an account?</Text>
-        <TouchableOpacity
-          style={{marginLeft: '2%'}}
-          onPress={() => navigator.navigate('SignUp')}>
-          <Text>Register now</Text>
-        </TouchableOpacity>
-      </View>
+      <Controller
+        control={control}
+        rules={{
+          minLength: 8,
+          required: true,
+        }}
+        render={({field: {onChange, onBlur, value}}) => (
+          <TextInput onBlur={onBlur} onChangeText={onChange} value={value} />
+        )}
+        name="rePassword"
+      />
+      {errors.rePassword ? <Text>{errors.rePassword.type}</Text> : null}
+      <Button
+        title="Create new acoount"
+        onPress={handleSubmit<FormType>(onSubmit)}
+      />
     </View>
   );
 }
 
-export default SignIn;
+export default SignUp;
