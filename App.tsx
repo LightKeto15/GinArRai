@@ -1,10 +1,11 @@
+import 'react-native-gesture-handler';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {NavigationContainer} from '@react-navigation/native';
 import React, {useState, useEffect, useContext} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import AppStack from './navigation/AppStack';
-import AuthStack from './navigation/AuthStack';
-import {AppContext, AppProvider} from './provider/AppProvider';
+import AppStack from './src/navigation/AppStack';
+import AuthStack from './src/navigation/AuthStack';
+import {AppContext, AppProvider} from './src/provider/AppProvider';
 
 function MainApp() {
   const appContext = useContext(AppContext);
@@ -14,7 +15,7 @@ function MainApp() {
     appContext!.setUser(userState);
     if (initializing) setInitializing(false);
   }
-  
+
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber;

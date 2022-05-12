@@ -58,7 +58,9 @@ export const AppProvider = ({children}: Props) => {
     addUserFav(data) {
       if (userFav) {
         if (userFav.get(data.idMeal!) === undefined) {
-          setUserFav(userFav.set(data.idMeal!, data));
+          let clone = new Map(userFav);
+          clone.set(data.idMeal!, data)
+          setUserFav(clone);
           //console.log('Add new');
         }
       } else {
