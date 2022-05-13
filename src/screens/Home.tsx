@@ -5,7 +5,13 @@ import {
   useFocusEffect,
   useNavigation,
 } from '@react-navigation/native';
-import React, {useContext, useLayoutEffect, useRef, useState} from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   Button,
   DrawerLayoutAndroid,
@@ -25,8 +31,10 @@ type HomeNavProp = NavigationProp<AppRootStackParamList, 'Home'>;
 type HomeDrawerProp = DrawerNavigationProp<AppDrawerParamList, 'HomeDrawer'>;
 function Home() {
   const navigator = useNavigation<HomeNavProp>();
-  //const draweragator = navigator.getParent<HomeDrawerProp>();
-
+  const draweragator = navigator.getParent<HomeDrawerProp>();
+  useEffect(() => {
+    draweragator.closeDrawer();
+  });
   //const appContext = useContext(AppContext);
   const {width} = useWindowDimensions();
   return (
@@ -42,7 +50,7 @@ function Home() {
         style={{
           color: '#e76f51',
           fontSize: 32,
-          marginBottom: 30,
+          marginBottom: '15%',
           fontWeight: '500',
         }}>
         Discover a delicious meal!

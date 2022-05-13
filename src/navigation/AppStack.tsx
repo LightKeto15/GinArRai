@@ -17,20 +17,23 @@ import {MealModel} from '../model/MealModel';
 import Instruction from '../screens/Instruction';
 export type AppRootStackParamList = {
   Home: undefined;
-  Favorite: undefined;
   Meal: undefined;
   Instruction: {mealData: MealModel};
+};
+export type AppFavRootStackParamList = {
+  Favorite: undefined;
+  InstructionFav: {mealData: MealModel};
 };
 
 export type AppDrawerParamList = {HomeDrawer: undefined; FavDrawer: undefined};
 
 const AppNavStack = createNativeStackNavigator<AppRootStackParamList>();
+const AppFavNavStack = createNativeStackNavigator<AppFavRootStackParamList>();
 const Drawer = createDrawerNavigator<AppDrawerParamList>();
 export default function AppStack() {
   const AppView = () => {
     return (
       <AppNavStack.Navigator
-      
         initialRouteName="Home"
         screenOptions={{headerShown: false}}>
         <AppNavStack.Screen name="Home" component={Home} />
@@ -38,9 +41,23 @@ export default function AppStack() {
         <AppNavStack.Screen
           name="Instruction"
           component={Instruction}
-        
+          options={{animation: 'none'}}
         />
       </AppNavStack.Navigator>
+    );
+  };
+  const FavView = () => {
+    return (
+      <AppFavNavStack.Navigator
+        initialRouteName="Favorite"
+        screenOptions={{headerShown: false}}>
+        <AppFavNavStack.Screen name="Favorite" component={Favorite} />
+        <AppFavNavStack.Screen
+          name="InstructionFav"
+          component={Instruction}
+          options={{animation: 'none'}}
+        />
+      </AppFavNavStack.Navigator>
     );
   };
   const CustomDrawerContent = (props: DrawerContentComponentProps) => {
@@ -68,7 +85,7 @@ export default function AppStack() {
                   <MaterialIcons color={color} size={size} name="logout" />
                 );
               }}
-              onPress={() => null}
+              onPress={() => appContext?.SignOut()}
             />
           </View>
         </DrawerContentScrollView>
@@ -99,7 +116,7 @@ export default function AppStack() {
       />
       <Drawer.Screen
         name="FavDrawer"
-        component={Favorite}
+        component={FavView}
         options={{
           drawerLabel: 'Favorite',
           drawerLabelStyle: {color: '#1c1c1ead'},

@@ -10,7 +10,6 @@ import {
   Alert,
   BackHandler,
   Button,
-  Image,
   ImageBackground,
   Linking,
   Pressable,
@@ -32,7 +31,7 @@ import {
 } from '../navigation/AppStack';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {TouchableHighlight} from 'react-native-gesture-handler';
-
+import FastImage from 'react-native-fast-image';
 type MealNavProp = NavigationProp<AppRootStackParamList, 'Meal'>;
 type MealDrawerProp = DrawerNavigationProp<AppDrawerParamList, 'HomeDrawer'>;
 function Meal() {
@@ -93,12 +92,20 @@ function Meal() {
       <View
         style={{
           flex: 1,
-          flexDirection: 'row',
+          flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <Text>Search new meal</Text>
-        <ActivityIndicator style={{marginLeft: 30}} />
+        <ActivityIndicator size={80} style={{marginBottom: 30}} />
+        <Text
+          style={{
+            flexWrap: 'wrap',
+            flexShrink: 1,
+            fontSize: 30,
+            color: '#e76f51',
+          }}>
+          Searching new meal!
+        </Text>
       </View>
     );
   }
@@ -125,7 +132,7 @@ function Meal() {
     return;
     <Text>{data!.strTags}</Text>;
   };
-  const getIngredient = () => {
+  /*const getIngredient = () => {
     return (
       <View>
         <Text>
@@ -230,7 +237,7 @@ function Meal() {
         </Text>
       </View>
     );
-  };
+  };*/
   return (
     <View style={{backgroundColor: 'white', flex: 1, flexDirection: 'column'}}>
       <View
@@ -320,14 +327,15 @@ function Meal() {
 
             elevation: 3,
           }}>
-          <Image
+          <FastImage
+            resizeMode="center"
             style={{
               width: width * 0.9,
               height: width * 0.9,
-              resizeMode: 'center',
+
               borderRadius: 8,
             }}
-            source={{uri: data!.strMealThumb!}}></Image>
+            source={{uri: data!.strMealThumb!}}></FastImage>
         </View>
         <View
           style={{

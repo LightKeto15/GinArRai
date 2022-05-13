@@ -1,4 +1,4 @@
-import {MealModel} from '../model/MealModel';
+import {ConvertToModel, MealModel} from '../model/MealModel';
 
 export default async function MealAPI() {
   const url = 'http://www.themealdb.com/api/json/v1/1/random.php';
@@ -12,7 +12,7 @@ export default async function MealAPI() {
     });
     let json = await response.json();
 
-    return json['meals'][0];
+    return ConvertToModel(json['meals'][0]);
   } catch (error) {
     console.error(error);
   }
