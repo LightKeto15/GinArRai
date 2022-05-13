@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useRef} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {
   createDrawerNavigator,
@@ -62,6 +62,7 @@ export default function AppStack() {
   };
   const CustomDrawerContent = (props: DrawerContentComponentProps) => {
     const appContext = useContext(AppContext);
+
     return (
       <View style={{flex: 1}}>
         <View
@@ -85,7 +86,11 @@ export default function AppStack() {
                   <MaterialIcons color={color} size={size} name="logout" />
                 );
               }}
-              onPress={() => appContext?.SignOut()}
+              onPress={() => {
+                //props.navigation.navigate('HomeDrawer')
+                props.navigation.closeDrawer();
+                appContext?.SignOut();
+              }}
             />
           </View>
         </DrawerContentScrollView>
@@ -95,7 +100,9 @@ export default function AppStack() {
   return (
     <Drawer.Navigator
       initialRouteName="HomeDrawer"
-      drawerContent={CustomDrawerContent}>
+      drawerContent={CustomDrawerContent}
+      >
+        
       <Drawer.Screen
         name="HomeDrawer"
         component={AppView}

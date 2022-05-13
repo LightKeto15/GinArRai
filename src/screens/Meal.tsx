@@ -84,7 +84,7 @@ function Meal() {
   const {width} = useWindowDimensions();
 
   if (!data) {
-    MealAPI().then(data => {
+    MealAPI.getRandom().then(data => {
       setData(data);
       setFav(false);
     });

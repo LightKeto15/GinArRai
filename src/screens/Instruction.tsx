@@ -4,6 +4,7 @@ import React, {useCallback, useLayoutEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Linking,
   Platform,
   Text,
   TouchableOpacity,
@@ -42,7 +43,7 @@ function Instruction({route, navigation}: InstNavProp) {
     return () => {
       const {index, routeNames} = draweragator.getState();
       if (routeNames[index] === 'HomeDrawer') {
-       return draweragator.setOptions({
+        return draweragator.setOptions({
           title: '',
           headerTransparent: true,
           headerShown: false,
@@ -161,6 +162,28 @@ function Instruction({route, navigation}: InstNavProp) {
     return (
       <View style={{marginHorizontal: 25, marginVertical: 10}}>
         <ScrollView>
+          {mealData.strSource ? (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+                width: '100%',
+                marginBottom: 10,
+              }}>
+              <TouchableOpacity
+                onPress={() => Linking.openURL(mealData.strSource!)}>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontWeight: '500',
+                    textDecorationLine: 'underline',
+                    marginRight: 10,
+                  }}>
+                  Source
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : null}
           <Text style={{fontSize: 18}}>{mealData.strInstructions}</Text>
         </ScrollView>
       </View>
@@ -327,7 +350,7 @@ function Instruction({route, navigation}: InstNavProp) {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{flex: 1, flexGrow: 10}}>
+        <View style={{flex: 1, flexGrow: 10, marginBottom: 10}}>
           {tap === 0 ? onInstTab() : onIngreTab()}
         </View>
       </View>

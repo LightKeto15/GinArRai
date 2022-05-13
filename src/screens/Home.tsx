@@ -1,3 +1,5 @@
+import {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {
   DrawerActions,
@@ -21,6 +23,9 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
+import {LoadModel} from '../components/LoadModal';
+import MealAPI from '../fetch/MealAPI';
+import {MealModel} from '../model/MealModel';
 import {
   AppDrawerParamList,
   AppRootStackParamList,
@@ -31,11 +36,7 @@ type HomeNavProp = NavigationProp<AppRootStackParamList, 'Home'>;
 type HomeDrawerProp = DrawerNavigationProp<AppDrawerParamList, 'HomeDrawer'>;
 function Home() {
   const navigator = useNavigation<HomeNavProp>();
-  const draweragator = navigator.getParent<HomeDrawerProp>();
-  useEffect(() => {
-    draweragator.closeDrawer();
-  });
-  //const appContext = useContext(AppContext);
+
   const {width} = useWindowDimensions();
   return (
     <View
@@ -74,8 +75,13 @@ function Home() {
 
           elevation: 5,
         }}
-        onPress={() => {
+        onPress={async () => {
           navigator.navigate('Meal');
+          /*let y = ['52957','52833']
+          for  await (const e of y) {
+            console.log(await MealAPI.getById(e))
+          }
+          console.log("DONE1")*/
         }}>
         <View
           style={{
@@ -91,6 +97,7 @@ function Home() {
           <Text style={{fontSize: 50, color: 'white'}}>Go</Text>
         </View>
       </TouchableOpacity>
+     
     </View>
   );
 }

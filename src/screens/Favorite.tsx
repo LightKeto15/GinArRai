@@ -16,19 +16,25 @@ import {AppContext} from '../provider/AppProvider';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FastImage from 'react-native-fast-image';
 import {
+  AppDrawerParamList,
   AppFavRootStackParamList,
   AppRootStackParamList,
 } from '../navigation/AppStack';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
+import {LoadModel} from '../components/LoadModal';
 
 type FavNavProp = NavigationProp<AppFavRootStackParamList, 'Favorite'>;
+type FavDrawerProp = DrawerNavigationProp<AppDrawerParamList, 'FavDrawer'>;
 function Favorite() {
   const navigator = useNavigation<FavNavProp>();
   const appContext = useContext(AppContext);
+  const [model, setModel] = useState(false);
+  const [remove, setRemove] = useState(false);
   const flatListRef = useRef<FlatList<MealModel> | null>(null);
 
-  if (!appContext?.userFav) {
+  if (!appContext?.userFav || appContext?.userFav.size == 0) {
     return (
       <View
         style={{
@@ -114,24 +120,27 @@ function Favorite() {
               {item.strMeal}
             </Text>
           </View>
-          <View style={{width: 30,marginRight: 25}} >
-          <TouchableOpacity
-            onPress={()=>appContext?.removeUserFav(item.idMeal!)}
-            style={{
-              
-              width: 55,
-              height: 55,
-              justifyContent: 'center',
-              alignItems: 'center',
-             
-            }}>
-            <MaterialIcons
-              name="delete"
-              size={38}
-              color={fav ? '#9d0208' : '#1c1c1ead'}
-            />
-          </TouchableOpacity>
-        </View>
+          <View style={{width: 30, marginRight: 25}}>
+            <TouchableOpacity
+              onPress={() => {
+                setModel(true);
+                appContext?.removeUserFav(item.idMeal!, () =>
+                setModel(false)
+                );
+              }}
+              style={{
+                width: 55,
+                height: 55,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <MaterialIcons
+                name="delete"
+                size={38}
+                color={fav ? '#9d0208' : '#1c1c1ead'}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </TouchableOpacity>
     );
@@ -144,6 +153,7 @@ function Favorite() {
           return value;
         })}
         renderItem={({item}) => renderCard(item)}></FlatList>
+      <LoadModel visible={model} />
     </View>
   );
 }
