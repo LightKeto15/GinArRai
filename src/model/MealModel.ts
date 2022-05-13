@@ -9,7 +9,7 @@ export interface MealModel {
   strTags: string | null;
   strYoutube: string | null;
   strIngredient: Array<string[]> | null;
-  strSource :  string | null;
+  strSource: string | null;
 }
 
 export function ConvertToModel(mealData: any) {
@@ -33,6 +33,6 @@ export function ConvertToModel(mealData: any) {
     strTags: mealData['strTags'],
     strYoutube: mealData['strYoutube'],
     strIngredient: ingreList,
-    strSource : mealData['strSource'],
+    strSource: mealData['strSource'],
   } as MealModel;
 }

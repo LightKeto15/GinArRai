@@ -6,12 +6,7 @@ import firestore from '@react-native-firebase/firestore';
 interface AppContextInterface {
   user: FirebaseAuthTypes.User | null;
   setUser: React.Dispatch<React.SetStateAction<FirebaseAuthTypes.User | null>>;
-  SignIn: (
-    email: string,
-    password: string,
-    // callBack: (user: FirebaseAuthTypes.User) => void,
-    // callBackError: () => void,
-  ) => Promise<string | null>;
+  SignIn: (email: string, password: string) => Promise<string | null>;
   SignOut: () => void;
   SignUp: (email: string, password: string) => Promise<string | null>;
   userFav: Map<string, MealModel> | null;
@@ -40,18 +35,12 @@ export const AppProvider = ({children}: Props) => {
     setInit() {
       setInit(true);
     },
-    SignIn: async (email, password /* callBack, callBackError*/) => {
+    SignIn: async (email, password) => {
       try {
         await auth().signInWithEmailAndPassword(email, password);
-        /*.then(data => {
-            callBack(data.user);
-          });*/
-        //setInit(false)
-        //setUserFav(null);
+
         return null;
       } catch (error) {
-        //TODO handle error
-        //callBackError();
         let authError = error as FirebaseAuthTypes.NativeFirebaseAuthError;
         return authError.message.replace(`[${authError.code}] `, '');
       }
@@ -60,8 +49,7 @@ export const AppProvider = ({children}: Props) => {
       try {
         await auth().signOut();
       } catch (error) {
-        //TODO handle error
-        //console.log(error);
+        console.log(error);
       }
     },
     SignUp: async (email: string, password: string) => {
@@ -76,14 +64,12 @@ export const AppProvider = ({children}: Props) => {
           });
         return null;
       } catch (error) {
-        //TODO handle error
         let authError = error as FirebaseAuthTypes.NativeFirebaseAuthError;
         return authError.message.replace(`[${authError.code}] `, '');
       }
     },
     userFav: userFav,
     addUserFavBatch(batch) {
-      //setInit(true);
       setUserFav(batch);
     },
     addUserFav(data) {
@@ -98,7 +84,6 @@ export const AppProvider = ({children}: Props) => {
             await user.set({favList: [...sData['favList'], data.idMeal!]});
           });
           setUserFav(clone);
-          //console.log('Add new');
         }
       } else {
         let temp = new Map<string, MealModel>();

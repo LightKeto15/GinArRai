@@ -3,7 +3,7 @@ import {ActivityIndicator, Modal, Text, View} from 'react-native';
 
 export function LoadModel({visible}: {visible: boolean}) {
   return (
-    <Modal onRequestClose={() => null} visible={visible} transparent={true} >
+    <Modal onRequestClose={() => null} visible={visible} transparent={true}>
       <View
         style={{
           flex: 1,

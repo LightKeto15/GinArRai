@@ -1,10 +1,8 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useContext, useEffect, useState} from 'react';
 import {
-  Button,
   Keyboard,
   KeyboardAvoidingView,
-  Platform,
   Text,
   TextInput,
   TouchableOpacity,
@@ -13,28 +11,21 @@ import {
 import {AuthRootStackParamList} from '../navigation/AuthStack';
 import {AppContext} from '../provider/AppProvider';
 
-import firestore from '@react-native-firebase/firestore';
 import {useForm, Controller} from 'react-hook-form';
 import {MainStyle} from '../styles/MainStyle';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TileButton} from '../components/TileButton';
 import SignUp from './SignUp';
 import {getErrorText} from '../Utility';
-import {LoadModel} from '../components/LoadModal';
-import {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {MealModel} from '../model/MealModel';
-import MealAPI from '../fetch/MealAPI';
 
-type SignInNavProp = NavigationProp<AuthRootStackParamList, 'SignIn'>;
 type FormType = {
   email: string;
   password: string;
 };
+
 function SignIn() {
-  const navigator = useNavigation<SignInNavProp>();
   const appContext = useContext(AppContext);
   const [error, setError] = useState<string | null>(null);
-  //const [model, setModel] = useState(false);
   const [type, setType] = useState(true);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const {
@@ -67,10 +58,8 @@ function SignIn() {
       keyboardDidShowListener.remove();
     };
   }, []);
- 
-  //const onLoggedError = () => setModel(false);
+
   const onSubmit = async (data: FormType) => {
-    //setModel(true);
     let result = await appContext?.SignIn(data.email, data.password)!;
     if (result) {
       setError(result);

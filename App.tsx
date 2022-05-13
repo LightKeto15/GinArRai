@@ -10,10 +10,12 @@ import MealAPI from './src/fetch/MealAPI';
 import {MealModel} from './src/model/MealModel';
 import firestore from '@react-native-firebase/firestore';
 import {LoadModel} from './src/components/LoadModal';
+
 function MainApp() {
   const appContext = useContext(AppContext);
   const [initializing, setInitializing] = useState(true);
   const [model, setModel] = useState(false);
+
   function onAuthStateChanged(userState: FirebaseAuthTypes.User | null) {
     if (!userState) {
       appContext?.removelAllFav();

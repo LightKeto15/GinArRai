@@ -1,8 +1,7 @@
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useLayoutEffect, useRef, useState} from 'react';
 import {
-  ActivityIndicator,
   Alert,
   Linking,
   Platform,
@@ -12,26 +11,25 @@ import {
   View,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {MealModel} from '../model/MealModel';
 import {
   AppDrawerParamList,
   AppRootStackParamList,
 } from '../navigation/AppStack';
 import YoutubePlayer from 'react-native-youtube-iframe';
-import {TabView, SceneMap} from 'react-native-tab-view';
 import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import FastImage from 'react-native-fast-image';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
+
 type InstNavProp = NativeStackScreenProps<AppRootStackParamList, 'Instruction'>;
 type InstDrawerProp = DrawerNavigationProp<AppDrawerParamList, 'HomeDrawer'>;
+
 function Instruction({route, navigation}: InstNavProp) {
   let mealData = route.params.mealData;
   const navigator = useNavigation();
   const draweragator = navigator.getParent<InstDrawerProp>();
-  const {width, height} = useWindowDimensions();
+  const {width} = useWindowDimensions();
   const sizeRef = useRef<View>(null);
   const [playing, setPlaying] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [tap, setTab] = useState(0);
 
   useLayoutEffect(() => {
@@ -64,19 +62,12 @@ function Instruction({route, navigation}: InstNavProp) {
     }
   }, []);
   const onReady = () => {
-    console.log('ready');
-    setLoading(false);
   };
 
   const onTabPress = (idx: number) => {
     setTab(idx);
   };
   let textSize = 26 - (mealData.strMeal!.length / 30) * 3;
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    {key: 'first', title: 'First'},
-    {key: 'second', title: 'Second'},
-  ]);
 
   const renderCard = (ingre: string, measure: string) => {
     return (
@@ -359,4 +350,3 @@ function Instruction({route, navigation}: InstNavProp) {
 }
 
 export default Instruction;
-/* */

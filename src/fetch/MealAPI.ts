@@ -2,7 +2,7 @@ import {ConvertToModel, MealModel} from '../model/MealModel';
 
 class MealAPI {
   public static async getById(id: string): Promise<MealModel | null> {
-    console.log(id)
+    console.log(id);
     const url = `http://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
     try {
       let response = await fetch(url, {

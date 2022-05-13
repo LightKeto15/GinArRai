@@ -100,9 +100,7 @@ export default function AppStack() {
   return (
     <Drawer.Navigator
       initialRouteName="HomeDrawer"
-      drawerContent={CustomDrawerContent}
-      >
-        
+      drawerContent={CustomDrawerContent}>
       <Drawer.Screen
         name="HomeDrawer"
         component={AppView}

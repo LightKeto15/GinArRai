@@ -1,14 +1,12 @@
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {NavigationProp} from '@react-navigation/native';
 import React, {useContext, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {Button, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {Text, TextInput, View} from 'react-native';
 import {TileButton} from '../components/TileButton';
 import {AuthRootStackParamList} from '../navigation/AuthStack';
 import {AppContext} from '../provider/AppProvider';
 import {MainStyle} from '../styles/MainStyle';
 import {getErrorText} from '../Utility';
-type SignUpNavProp = NavigationProp<AuthRootStackParamList, 'SignIn'>;
 
 type FormType = {
   email: string;
@@ -23,7 +21,6 @@ function SignUp() {
     control,
     handleSubmit,
     formState: {errors},
-    getValues,
     setError,
   } = useForm<FormType>({
     defaultValues: {

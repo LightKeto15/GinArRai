@@ -7,13 +7,7 @@ import React, {
 } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   BackHandler,
-  Button,
-  ImageBackground,
-  Linking,
-  Pressable,
-  ScrollView,
   Text,
   TouchableOpacity,
   useWindowDimensions,
@@ -23,14 +17,12 @@ import MealAPI from '../fetch/MealAPI';
 import {MealModel} from '../model/MealModel';
 import {AppContext} from '../provider/AppProvider';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {
   AppDrawerParamList,
   AppRootStackParamList,
 } from '../navigation/AppStack';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
-import {TouchableHighlight} from 'react-native-gesture-handler';
 import FastImage from 'react-native-fast-image';
 type MealNavProp = NavigationProp<AppRootStackParamList, 'Meal'>;
 type MealDrawerProp = DrawerNavigationProp<AppDrawerParamList, 'HomeDrawer'>;
@@ -76,7 +68,6 @@ function Meal() {
 
     return () => {
       backHandler.remove();
-      //console.log(fav);
     };
   }, [fav]);
 
@@ -120,124 +111,12 @@ function Meal() {
 
   const onFavorite = () => {
     if (fav) {
-      //appContext?.removeUserFav(data.idMeal!);
       setFav(false);
     } else {
-      //appContext?.addUserFav(data);
       setFav(true);
     }
   };
 
-  const getTagView = () => {
-    return;
-    <Text>{data!.strTags}</Text>;
-  };
-  /*const getIngredient = () => {
-    return (
-      <View>
-        <Text>
-          {data!.strIngredient1
-            ? `${data!.strIngredient1} : ${data!.strMeasure1}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient2
-            ? `${data!.strIngredient2} : ${data!.strMeasure2}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient3
-            ? `${data!.strIngredient3} : ${data!.strMeasure3}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient4
-            ? `${data!.strIngredient4} : ${data!.strMeasure4}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient5
-            ? `${data!.strIngredient5} : ${data!.strMeasure5}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient6
-            ? `${data!.strIngredient6} : ${data!.strMeasure6}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient7
-            ? `${data!.strIngredient7} : ${data!.strMeasure7}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient8
-            ? `${data!.strIngredient8} : ${data!.strMeasure8}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient9
-            ? `${data!.strIngredient9} : ${data!.strMeasure9}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient10
-            ? `${data!.strIngredient10} : ${data!.strMeasure10}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient11
-            ? `${data!.strIngredient11} : ${data!.strMeasure11}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient12
-            ? `${data!.strIngredient12} : ${data!.strMeasure12}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient13
-            ? `${data!.strIngredient13} : ${data!.strMeasure13}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient14
-            ? `${data!.strIngredient14} : ${data!.strMeasure14}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient15
-            ? `${data!.strIngredient15} : ${data!.strMeasure15}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient16
-            ? `${data!.strIngredient16} : ${data!.strMeasure16}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient17
-            ? `${data!.strIngredient17} : ${data!.strMeasure17}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient18
-            ? `${data!.strIngredient18} : ${data!.strMeasure18}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient19
-            ? `${data!.strIngredient19} : ${data!.strMeasure19}`
-            : null}
-        </Text>
-        <Text>
-          {data!.strIngredient20
-            ? `${data!.strIngredient20} : ${data!.strMeasure20}`
-            : null}
-        </Text>
-      </View>
-    );
-  };*/
   return (
     <View style={{backgroundColor: 'white', flex: 1, flexDirection: 'column'}}>
       <View

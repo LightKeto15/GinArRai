@@ -1,39 +1,10 @@
-import {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
-import {
-  DrawerActions,
-  NavigationProp,
-  useFocusEffect,
-  useNavigation,
-} from '@react-navigation/native';
-import React, {
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
-import {
-  Button,
-  DrawerLayoutAndroid,
-  Pressable,
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from 'react-native';
-import {LoadModel} from '../components/LoadModal';
-import MealAPI from '../fetch/MealAPI';
-import {MealModel} from '../model/MealModel';
-import {
-  AppDrawerParamList,
-  AppRootStackParamList,
-} from '../navigation/AppStack';
-import {AppContext} from '../provider/AppProvider';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import React from 'react';
+import {Text, TouchableOpacity, useWindowDimensions, View} from 'react-native';
+
+import {AppRootStackParamList} from '../navigation/AppStack';
 
 type HomeNavProp = NavigationProp<AppRootStackParamList, 'Home'>;
-type HomeDrawerProp = DrawerNavigationProp<AppDrawerParamList, 'HomeDrawer'>;
 function Home() {
   const navigator = useNavigation<HomeNavProp>();
 
@@ -97,7 +68,6 @@ function Home() {
           <Text style={{fontSize: 50, color: 'white'}}>Go</Text>
         </View>
       </TouchableOpacity>
-     
     </View>
   );
 }
