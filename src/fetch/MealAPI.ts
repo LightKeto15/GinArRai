@@ -29,7 +29,7 @@ class MealAPI {
   }
 
   public static async getRandom(): Promise<MealModel | null | string> {
-    const url = 'test12345'; //'http://www.themealdb.com/api/json/v1/1/random.php';
+    const url = 'http://www.themealdb.com/api/json/v1/1/random.php';
     return this.makeRequest(url);
   }
 }
