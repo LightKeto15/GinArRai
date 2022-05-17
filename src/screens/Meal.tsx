@@ -29,7 +29,7 @@ type MealDrawerProp = DrawerNavigationProp<AppDrawerParamList, 'HomeDrawer'>;
 function Meal() {
   const navigator = useNavigation<MealNavProp>();
   const draweragator = navigator.getParent<MealDrawerProp>();
-  const [data, setData] = useState<MealModel | null>(null);
+  const [data, setData] = useState<MealModel | null | string>(null);
   const appContext = useContext(AppContext);
   const [fav, setFav] = useState(false);
   useLayoutEffect(() => {
@@ -50,7 +50,7 @@ function Meal() {
     if (fav === true) {
       console.log(fav);
       try {
-        appContext?.addUserFav(data!);
+        appContext?.addUserFav(data! as MealModel);
       } catch (e) {
         //Nothing..
       }
@@ -100,9 +100,37 @@ function Meal() {
       </View>
     );
   }
+  else if (data as string) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Text
+          style={{
+            flexWrap: 'wrap',
+            flexShrink: 1,
+            fontSize: 30,
+            color: '#e76f51',
+          }}>{data}</Text>
+        <Text
+          style={{
+            flexWrap: 'wrap',
+            flexShrink: 1,
+            fontSize: 25,
+            color: '#e76f51',
+          }}>
+          Please try again later.
+        </Text>
+      </View>
+    );
+  }
   const onAgain = () => {
     if (fav) {
-      appContext?.addUserFav(data);
+      appContext?.addUserFav(data as MealModel);
     } else {
       setData(null);
       setFetchData(!fetchData);
@@ -139,7 +167,7 @@ function Meal() {
             onPress={() => {
               navigator.goBack();
               if (fav) {
-                appContext?.addUserFav(data);
+                appContext?.addUserFav(data as MealModel);
               }
             }}
             style={{
@@ -178,7 +206,7 @@ function Meal() {
               fontSize: 30,
               color: '#e76f51',
             }}>
-            {data!.strMeal}
+            {(data as MealModel)!.strMeal}
           </Text>
           <Text
             style={{
@@ -187,7 +215,7 @@ function Meal() {
               fontSize: 22,
               color: '#e76f51',
             }}>
-            {data!.strCategory}
+            {(data as MealModel)!.strCategory}
           </Text>
         </View>
         <View
@@ -214,7 +242,7 @@ function Meal() {
 
               borderRadius: 8,
             }}
-            source={{uri: data!.strMealThumb!}}></FastImage>
+            source={{uri: (data as MealModel)!.strMealThumb!}}></FastImage>
         </View>
         <View
           style={{
@@ -225,7 +253,9 @@ function Meal() {
             flexDirection: 'row',
           }}>
           <TouchableOpacity
-            onPress={() => navigator.navigate('Instruction', {mealData: data})}
+            onPress={() =>
+              navigator.navigate('Instruction', {mealData: data as MealModel})
+            }
             style={{
               borderWidth: 5,
               borderColor: '#e76f51',

@@ -22,7 +22,8 @@ function MainApp() {
     } else {
       if (appContext) {
         async function fetchAPI() {
-          {
+          try {
+            firestore().settings({});
             setModel(true);
             console.log('being fetch...');
             await firestore()
@@ -44,6 +45,8 @@ function MainApp() {
             appContext?.addUserFavBatch(nList);
             console.log('done fetch...');
             setModel(false);
+          } catch (error) {
+            console.log(error);
           }
         }
         fetchAPI();

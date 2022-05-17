@@ -1,42 +1,36 @@
+import axios, {AxiosError} from 'axios';
 import {ConvertToModel, MealModel} from '../model/MealModel';
 
 class MealAPI {
-  public static async getById(id: string): Promise<MealModel | null> {
+  static TIMEOUT = 5000;
+
+  private static async makeRequest(
+    url: string,
+  ): Promise<MealModel | null | string> {
+    try {
+      let response = await axios.get(url, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        timeout: this.TIMEOUT,
+      });
+      return ConvertToModel(response.data['meals'][0]);
+    } catch (error) {
+      let err = error as AxiosError;
+      console.error(err);
+      return `${err.message}`;
+    }
+  }
+
+  public static async getById(id: string): Promise<MealModel | null | string> {
     console.log(id);
     const url = `http://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
-    try {
-      let response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
-      let json = await response.json();
-
-      return ConvertToModel(json['meals'][0]);
-    } catch (error) {
-      console.error(error);
-    }
-    return null;
+    return this.makeRequest(url);
   }
-  public static async getRandom(): Promise<MealModel | null> {
-    const url = 'http://www.themealdb.com/api/json/v1/1/random.php';
-    try {
-      let response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
-      let json = await response.json();
 
-      return ConvertToModel(json['meals'][0]);
-    } catch (error) {
-      console.error(error);
-    }
-    return null;
+  public static async getRandom(): Promise<MealModel | null | string> {
+    const url = 'test12345'; //'http://www.themealdb.com/api/json/v1/1/random.php';
+    return this.makeRequest(url);
   }
 }
 
