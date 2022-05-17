@@ -100,7 +100,7 @@ function Meal() {
       </View>
     );
   }
-  else if (data as string) {
+  else if ((data as MealModel).error !== null) {
     return (
       <View
         style={{
@@ -115,7 +115,7 @@ function Meal() {
             flexShrink: 1,
             fontSize: 30,
             color: '#e76f51',
-          }}>{data}</Text>
+          }}>{(data as MealModel).error}</Text>
         <Text
           style={{
             flexWrap: 'wrap',

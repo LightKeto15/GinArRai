@@ -18,7 +18,7 @@ class MealAPI {
     } catch (error) {
       let err = error as AxiosError;
       console.error(err);
-      return `${err.message}`;
+      return {error: err.message} as MealModel;
     }
   }
 
