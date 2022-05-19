@@ -10,7 +10,6 @@ import MealAPI from './src/fetch/MealAPI';
 import {MealModel} from './src/model/MealModel';
 import firestore from '@react-native-firebase/firestore';
 import {LoadModel} from './src/components/LoadModal';
-import {NativeBaseProvider} from 'native-base';
 
 function MainApp() {
   const appContext = useContext(AppContext);
@@ -69,12 +68,10 @@ function MainApp() {
     );
   }
   return (
-    <NativeBaseProvider>
-      <NavigationContainer>
-        {appContext!.user ? <AppStack /> : <AuthStack />}
-        <LoadModel visible={model} />
-      </NavigationContainer>
-    </NativeBaseProvider>
+    <NavigationContainer>
+      {appContext!.user ? <AppStack /> : <AuthStack />}
+      <LoadModel visible={model} />
+    </NavigationContainer>
   );
 }
 
