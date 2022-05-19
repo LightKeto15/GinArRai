@@ -10,6 +10,7 @@ import MealAPI from './src/fetch/MealAPI';
 import {MealModel} from './src/model/MealModel';
 import firestore from '@react-native-firebase/firestore';
 import {LoadModel} from './src/components/LoadModal';
+import {NativeBaseProvider} from 'native-base';
 
 function MainApp() {
   const appContext = useContext(AppContext);
@@ -23,7 +24,6 @@ function MainApp() {
       if (appContext) {
         async function fetchAPI() {
           try {
-            firestore().settings({});
             setModel(true);
             console.log('being fetch...');
             await firestore()
@@ -39,7 +39,7 @@ function MainApp() {
             await Promise.all(
               favList.map(async id => {
                 const fData = await MealAPI.getById(id);
-                nList.set(fData?.idMeal!, fData!);
+                nList.set((fData as MealModel).idMeal!, fData as MealModel);
               }),
             );
             appContext?.addUserFavBatch(nList);
@@ -69,10 +69,12 @@ function MainApp() {
     );
   }
   return (
-    <NavigationContainer>
-      {appContext!.user ? <AppStack /> : <AuthStack />}
-      <LoadModel visible={model} />
-    </NavigationContainer>
+    <NativeBaseProvider>
+      <NavigationContainer>
+        {appContext!.user ? <AppStack /> : <AuthStack />}
+        <LoadModel visible={model} />
+      </NavigationContainer>
+    </NativeBaseProvider>
   );
 }
 
