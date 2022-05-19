@@ -7,7 +7,7 @@ import {
   DrawerItem,
   DrawerItemList,
 } from '@react-navigation/drawer';
-import Favorite from '../screens/Favorite';
+import Favorite from '../screens/native/Favorite';
 import Home from '../screens/native/Home';
 import Meal from '../screens/Meal';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
