@@ -11,6 +11,7 @@ import {MealModel} from './src/model/MealModel';
 import firestore from '@react-native-firebase/firestore';
 import {LoadModel} from './src/components/LoadModal';
 import {NativeBaseProvider} from 'native-base';
+import { theme } from './src/styles/Theme';
 
 function MainApp() {
   const appContext = useContext(AppContext);
@@ -69,7 +70,7 @@ function MainApp() {
     );
   }
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider theme={theme}>
       <NavigationContainer>
         {appContext!.user ? <AppStack /> : <AuthStack />}
         <LoadModel visible={model} />

@@ -1,9 +1,9 @@
 
-
 export  const getErrorText = (type: string) => {
+  //console.log(type)
     switch (type) {
       case 'minLength':
-        return 'Password length must greater than or equal to 8 charactesr';
+        return 'Password should contain at least 8 character';
       case 'required':
         return 'This is required.';
         case 'match':
