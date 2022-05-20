@@ -1,4 +1,4 @@
-import React, {useContext, useRef} from 'react';
+import React, {useContext} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {
   createDrawerNavigator,
@@ -7,8 +7,8 @@ import {
   DrawerItem,
   DrawerItemList,
 } from '@react-navigation/drawer';
-import Favorite from '../screens/native/Favorite';
-import Home from '../screens/native/Home';
+import Favorite from '../screens/Favorite';
+import Home from '../screens/Home';
 import Meal from '../screens/Meal';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Text, View} from 'react-native';

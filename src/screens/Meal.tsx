@@ -1,3 +1,16 @@
+import {DrawerNavigationProp} from '@react-navigation/drawer';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {
+  Box,
+  Button,
+  Center,
+  HStack,
+  Icon,
+  IconButton,
+  Spinner,
+  Text,
+  VStack,
+} from 'native-base';
 import React, {
   useCallback,
   useContext,
@@ -5,27 +18,20 @@ import React, {
   useLayoutEffect,
   useState,
 } from 'react';
-import {
-  ActivityIndicator,
-  BackHandler,
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import {BackHandler, TouchableOpacity, useWindowDimensions} from 'react-native';
+import FastImage from 'react-native-fast-image';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MealAPI from '../fetch/MealAPI';
 import {MealModel} from '../model/MealModel';
-import {AppContext} from '../provider/AppProvider';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {
-  AppDrawerParamList,
   AppRootStackParamList,
+  AppDrawerParamList,
 } from '../navigation/AppStack';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
-import FastImage from 'react-native-fast-image';
+import {AppContext} from '../provider/AppProvider';
+
 type MealNavProp = NavigationProp<AppRootStackParamList, 'Meal'>;
 type MealDrawerProp = DrawerNavigationProp<AppDrawerParamList, 'HomeDrawer'>;
+
 function Meal() {
   const navigator = useNavigation<MealNavProp>();
   const draweragator = navigator.getParent<MealDrawerProp>();
@@ -73,62 +79,6 @@ function Meal() {
 
   const [fetchData, setFetchData] = useState(false);
   const {width} = useWindowDimensions();
-
-  if (!data) {
-    MealAPI.getRandom().then(data => {
-      setData(data);
-      setFav(false);
-    });
-    return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <ActivityIndicator size={80} style={{marginBottom: 30}} />
-        <Text
-          style={{
-            flexWrap: 'wrap',
-            flexShrink: 1,
-            fontSize: 30,
-            color: '#e76f51',
-          }}>
-          Searching new meal!
-        </Text>
-      </View>
-    );
-  } else if ((data as MealModel).error !== null) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Text
-          style={{
-            flexWrap: 'wrap',
-            flexShrink: 1,
-            fontSize: 30,
-            color: '#e76f51',
-          }}>
-          {(data as MealModel).error}
-        </Text>
-        <Text
-          style={{
-            flexWrap: 'wrap',
-            flexShrink: 1,
-            fontSize: 25,
-            color: '#e76f51',
-          }}>
-          Please try again later.
-        </Text>
-      </View>
-    );
-  }
   const onAgain = () => {
     if (fav) {
       appContext?.addUserFav(data as MealModel);
@@ -145,232 +95,152 @@ function Meal() {
       setFav(true);
     }
   };
+  if (!data) {
+    MealAPI.getRandom().then(data => {
+      setData(data);
+      setFav(false);
+    });
+    return (
+      <Center flex={1}>
+        <HStack space={5} justifyContent="center" alignItems={'center'}>
+          <Text fontSize={30} color="primary.100">
+            Searching new meal!
+          </Text>
+          <Spinner size={42} />
+        </HStack>
+      </Center>
+    );
+  } else if ((data as MealModel).error !== null) {
+    return (
+      <Center flex={1}>
+        <Text
+          fontSize={30}
+          color="primary.100"
+          flexWrap={'wrap'}
+          flexShrink={1}
+          marginX="10px">
+          {(data as MealModel).error}
+        </Text>
+      </Center>
+    );
+  }
 
   return (
-    <View style={{backgroundColor: 'white', flex: 1, flexDirection: 'column'}}>
-      <View
-        style={{
-          flex: 1,
-          flexGrow: 1,
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}>
-        <View
+    <VStack flex={1}>
+      <Box
+        h="42px"
+        alignItems={'flex-start'}
+        marginLeft="10px"
+        marginBottom="10px"
+        marginTop="10px">
+        <TouchableOpacity
+          onPress={() => {
+            navigator.goBack();
+            if (fav) {
+              appContext?.addUserFav(data as MealModel);
+            }
+          }}
           style={{
             flex: 1,
-            width: width,
-            flexGrow: 1,
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
-            marginLeft: 10,
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-              navigator.goBack();
-              if (fav) {
-                appContext?.addUserFav(data as MealModel);
-              }
-            }}
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <MaterialIcons
-              name="navigate-before"
-              size={42}
-              color={'#1c1c1ead'}
-            />
-          </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            flex: 1,
-            flexGrow: 2,
-            width: width,
             justifyContent: 'center',
             alignItems: 'center',
-            shadowColor: '#000',
-            padding: 10,
-            shadowOffset: {
-              width: 0,
-              height: 1,
-            },
-            shadowOpacity: 0.18,
-            shadowRadius: 1.0,
-            elevation: 1,
           }}>
-          <Text
-            style={{
-              flexWrap: 'wrap',
-              flexShrink: 1,
-              fontSize: 30,
-              color: '#e76f51',
-            }}>
-            {(data as MealModel)!.strMeal}
-          </Text>
-          <Text
-            style={{
-              flexWrap: 'wrap',
-              flexShrink: 1,
-              fontSize: 22,
-              color: '#e76f51',
-            }}>
-            {(data as MealModel)!.strCategory}
-          </Text>
-        </View>
-        <View
+          <MaterialIcons name="navigate-before" size={42} color={'#1c1c1ead'} />
+        </TouchableOpacity>
+      </Box>
+      <Box
+        flex={1}
+        flexGrow={2}
+        justifyContent={'center'}
+        alignItems={'center'}>
+        <Text
+          marginX="10px"
+          textAlign={'center'}
+          fontSize={30}
+          color="primary.100"
+          flexWrap={'wrap'}
+          flexShrink={1}>
+          {(data as MealModel)!.strMeal}
+        </Text>
+        <Text
+          marginX="10px"
+          textAlign={'center'}
+          fontSize={22}
+          color="primary.100"
+          flexWrap={'wrap'}
+          flexShrink={1}>
+          {(data as MealModel)!.strCategory}
+        </Text>
+      </Box>
+      <Box
+        flex={1}
+        flexGrow={8}
+        justifyContent={'center'}
+        alignItems={'center'}>
+        <FastImage
+          resizeMode="center"
           style={{
-            flex: 1,
-            flexGrow: 8,
-            justifyContent: 'center',
-            alignItems: 'center',
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 1,
-            },
-            shadowOpacity: 0.22,
-            shadowRadius: 2.22,
+            width: width * 0.9,
+            height: width * 0.9,
 
-            elevation: 3,
-          }}>
-          <FastImage
-            resizeMode="center"
-            style={{
-              width: width * 0.9,
-              height: width * 0.9,
-
-              borderRadius: 8,
-            }}
-            source={{uri: (data as MealModel)!.strMealThumb!}}></FastImage>
-        </View>
-        <View
-          style={{
-            flex: 1,
-            flexGrow: 2,
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            flexDirection: 'row',
-          }}>
-          <TouchableOpacity
+            borderRadius: 8,
+          }}
+          source={{uri: (data as MealModel)!.strMealThumb!}}></FastImage>
+      </Box>
+      <Box flex={1} flexGrow={2} justifyContent={'center'}>
+        <HStack justifyContent={'center'} space={'50px'}>
+          <IconButton
+            variant={'outline'}
+            borderWidth={5}
             onPress={() =>
               navigator.navigate('Instruction', {mealData: data as MealModel})
             }
-            style={{
-              borderWidth: 5,
-              borderColor: '#e76f51',
-              borderRadius: 55,
-              width: 55,
-              height: 55,
-              justifyContent: 'center',
-              alignItems: 'center',
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: 1,
-              },
-              shadowOpacity: 0.2,
-              shadowRadius: 1.41,
-
-              elevation: 2,
-            }}>
-            <MaterialIcons name="restaurant-menu" size={42} color={'#e76f51'} />
-          </TouchableOpacity>
-          <View style={{width: width * 0.1}} />
-          <TouchableOpacity
+            marginRight={2}
+            borderRadius="full"
+            icon={
+              <Icon
+                as={<MaterialIcons name="restaurant-menu" />}
+                color={'primary.100'}
+                size={'38px'}
+              />
+            }
+          />
+          <IconButton
             onPress={onFavorite}
-            style={{
-              borderWidth: 5,
-              borderColor: '#e76f51',
-              borderRadius: 55,
-              width: 55,
-              height: 55,
-              justifyContent: 'center',
-              alignItems: 'center',
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: 1,
-              },
-              shadowOpacity: 0.2,
-              shadowRadius: 1.41,
-
-              elevation: 2,
-            }}>
-            <MaterialIcons
-              name="favorite"
-              size={42}
-              color={fav ? '#9d0208' : '#1c1c1ead'}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View
-        style={{
-          height: 80,
-          backgroundColor: 'white',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 0.22,
-          shadowRadius: 2.22,
-
-          elevation: 3,
-        }}>
-        <View style={{width: '100%', height: 0.5, backgroundColor: 'gray'}} />
-        <TouchableOpacity
+            variant={'outline'}
+            borderWidth={5}
+            marginRight={2}
+            borderRadius="full"
+            icon={
+              <Icon
+                as={<MaterialIcons name="favorite" />}
+                color={fav ? '#9d0208' : '#1c1c1ead'}
+                size={'38px'}
+              />
+            }
+          />
+        </HStack>
+      </Box>
+      <Box
+        marginBottom={'10px'}
+        h="80px"
+        alignItems={'center'}
+        justifyContent={'center'}>
+        <Button
           onPress={onAgain}
-          style={{
-            backgroundColor: '#e76f51',
-            borderRadius: 8,
-            height: 48,
-            width: '45%',
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-
-            elevation: 5,
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              flex: 1,
-            }}>
-            <View
-              style={{
-                flex: 1,
-                flexGrow: 5,
-                alignItems: 'flex-end',
-                justifyContent: 'center',
-              }}>
-              <MaterialIcons name="refresh" size={28} color="white" />
-            </View>
-            <View
-              style={{
-                flex: 1,
-                flexGrow: 7,
-                alignItems: 'flex-start',
-                justifyContent: 'center',
-              }}>
-              <Text style={{color: 'white', fontSize: 22, marginLeft: 10}}>
-                New
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
-    </View>
+          w="70%"
+          _text={{fontSize: 22}}
+          leftIcon={
+            <Icon
+              as={<MaterialIcons name="refresh" />}
+              size={28}
+              color="white"
+            />
+          }>
+          New
+        </Button>
+      </Box>
+    </VStack>
   );
 }
 

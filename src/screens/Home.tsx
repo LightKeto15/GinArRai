@@ -1,74 +1,40 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {Box, Center, Circle, Text, VStack, ZStack} from 'native-base';
 import React from 'react';
-import {Text, TouchableOpacity, useWindowDimensions, View} from 'react-native';
-
+import {TouchableOpacity, useWindowDimensions} from 'react-native';
 import {AppRootStackParamList} from '../navigation/AppStack';
 
 type HomeNavProp = NavigationProp<AppRootStackParamList, 'Home'>;
+
 function Home() {
   const navigator = useNavigation<HomeNavProp>();
 
-  const {width} = useWindowDimensions();
+  const {width, height} = useWindowDimensions();
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'white',
-        flexDirection: 'column',
-      }}>
-      <Text
-        style={{
-          color: '#e76f51',
-          fontSize: 32,
-          marginBottom: '15%',
-          fontWeight: '500',
-        }}>
-        Discover a delicious meal!
-      </Text>
-      <TouchableOpacity
-        style={{
-          borderWidth: 5,
-          borderColor: '#e76f51',
-          borderRadius: width * 0.45,
-          width: width * 0.45,
-          height: width * 0.45,
-          justifyContent: 'center',
-          alignItems: 'center',
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-
-          elevation: 5,
-        }}
-        onPress={async () => {
-          navigator.navigate('Meal');
-          /*let y = ['52957','52833']
-          for  await (const e of y) {
-            console.log(await MealAPI.getById(e))
-          }
-          console.log("DONE1")*/
-        }}>
-        <View
-          style={{
-            borderColor: 'white',
-            borderWidth: 8,
-            backgroundColor: '#e76f51',
-            borderRadius: width * 0.43,
-            width: width * 0.43,
-            height: width * 0.43,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text style={{fontSize: 50, color: 'white'}}>Go</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+    <ZStack justifyContent={'flex-start'} flex={1}>
+      <Box w="full" h="full">
+        <Center>
+          <TouchableOpacity onPress={() => navigator.navigate('Meal')}>
+            <ZStack flex={1} alignItems={'center'} justifyContent={'center'}>
+              <Circle size={width * 0.45} bg="primary.100" />
+              <Circle size={width * 0.42} bg="white" />
+              <Circle size={width * 0.39} bg="primary.100">
+                <Text fontSize={60} color="white">
+                  GO
+                </Text>
+              </Circle>
+            </ZStack>
+          </TouchableOpacity>
+        </Center>
+      </Box>
+      <Box w="full" h={height * 0.6}>
+        <VStack flex={1} justifyContent="center" alignItems={'center'}>
+          <Text color="primary.100" fontSize={30}>
+            Discover a delicious meal!
+          </Text>
+        </VStack>
+      </Box>
+    </ZStack>
   );
 }
 
