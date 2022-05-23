@@ -11,25 +11,18 @@ import {
   Text,
   VStack,
 } from 'native-base';
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import {BackHandler, TouchableOpacity, useWindowDimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch} from 'react-redux';
-import {addFavorite} from '../../redux/fav-meal/action';
+import {addFavorite} from '../../redux/fav-meal/actions';
 import MealAPI from '../fetch/MealAPI';
 import {MealModel} from '../model/MealModel';
 import {
   AppRootStackParamList,
   AppDrawerParamList,
 } from '../navigation/AppStack';
-import {AppContext} from '../provider/AppProvider';
 
 type MealNavProp = NavigationProp<AppRootStackParamList, 'Meal'>;
 type MealDrawerProp = DrawerNavigationProp<AppDrawerParamList, 'HomeDrawer'>;
@@ -41,6 +34,7 @@ function Meal() {
   const [fav, setFav] = useState(false);
   const dispatch = useDispatch();
 
+  // Hide title bar and show again when user leave this page.
   useLayoutEffect(() => {
     draweragator.setOptions({
       title: '',
@@ -55,17 +49,12 @@ function Meal() {
       });
     };
   }, []);
-  
+
+  // Add back press callback for save the favorite meal.
   const backAction = useCallback(() => {
     if (fav === true) {
       console.log(fav);
-      try {
-        dispatch(addFavorite(data! as MealModel));
-      } catch (e) {
-        //Nothing..
-      }
-    } else {
-      console.log('fav');
+      dispatch(addFavorite(data! as MealModel));
     }
     return false;
   }, [fav]);
@@ -83,10 +72,11 @@ function Meal() {
 
   const [fetchData, setFetchData] = useState(false);
   const {width} = useWindowDimensions();
+
   const onAgain = () => {
     if (fav) {
       dispatch(addFavorite(data! as MealModel));
-    } 
+    }
     setData(null);
     setFetchData(!fetchData);
   };
@@ -99,8 +89,8 @@ function Meal() {
     }
   };
 
-  
   if (!data) {
+    // Call API for new meal data.
     MealAPI.getRandom().then(data => {
       setData(data);
       setFav(false);

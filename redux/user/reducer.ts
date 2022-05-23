@@ -1,5 +1,5 @@
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {UserState, UserActionInterface, UserActionType} from './type';
+import {UserState, UserActionInterface, UserActionType} from './types';
 
 const initalState: UserState = {
   user: null,

@@ -1,5 +1,5 @@
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {UserActionInterface, UserActionType} from './type';
+import {UserActionInterface, UserActionType} from './types';
 
 export function setUserAuthError(
   error: FirebaseAuthTypes.NativeFirebaseAuthError | null,

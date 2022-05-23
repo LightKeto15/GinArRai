@@ -6,13 +6,15 @@ import SignInPanel from '../components/SignInPanel';
 import SignUpPanel from '../components/SignUpPanel';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useDispatch, useSelector} from 'react-redux';
-import {getUserAuthError} from '../../redux/user/selector';
+import {getUserAuthError} from '../../redux/user/selectors';
 import {setUserAuthError} from '../../redux/user/actions';
 
 function Auth() {
   const userAuthError = useSelector(getUserAuthError);
   const dispatch = useDispatch();
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  //Add keyboard callback for hide footage text.
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',

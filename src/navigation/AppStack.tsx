@@ -12,11 +12,10 @@ import Home from '../screens/Home';
 import Meal from '../screens/Meal';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Text, View} from 'react-native';
-import {AppContext} from '../provider/AppProvider';
 import {MealModel} from '../model/MealModel';
 import Instruction from '../screens/Instruction';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUser } from '../../redux/user/selector';
+import { getUser } from '../../redux/user/selectors';
 import { signOutUser } from '../../redux/user/actions';
 
 export type AppRootStackParamList = {
@@ -91,10 +90,7 @@ export default function AppStack() {
                 );
               }}
               onPress={() => {
-                //props.navigation.navigate('HomeDrawer')
                 props.navigation.closeDrawer();
-                //appContext?.SignOut();
-                //TODO sign out
                 dispatch(signOutUser())
               }}
             />

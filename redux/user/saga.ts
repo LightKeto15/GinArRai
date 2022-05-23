@@ -1,8 +1,9 @@
 import {all, call, fork, put, takeEvery, takeLeading} from 'redux-saga/effects';
-import {UserActionInterface, UserActionType} from './type';
+import {UserActionInterface, UserActionType} from './types';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {setUserAuthError} from './actions';
 import firestore from '@react-native-firebase/firestore';
+
 function* userAuthSignOut() {
   try {
     yield call(() => auth().signOut());

@@ -3,29 +3,26 @@ import {FlatList, Icon, Text, VStack} from 'native-base';
 import React, {useState} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
-import { removeFavorite } from '../../redux/fav-meal/action';
+import {removeFavorite} from '../../redux/fav-meal/actions';
 import {getFavorite} from '../../redux/fav-meal/selectors';
 import {FavoriteItemTile} from '../components/FavoriteItemTile';
 import {LoadModel} from '../components/LoadModal';
 import {MealModel} from '../model/MealModel';
 import {AppFavRootStackParamList} from '../navigation/AppStack';
 
-
 type FavNavProp = NavigationProp<AppFavRootStackParamList, 'Favorite'>;
 
 function Favorite() {
   const navigator = useNavigation<FavNavProp>();
-  const [model, setModel] = useState(false);
   const userFav = useSelector(getFavorite);
   const dispatch = useDispatch();
+
   const onTilePress = (item: MealModel) => {
     navigator.navigate('InstructionFav', {mealData: item});
   };
+
   const onTileRemove = (item: MealModel) => {
-    //setModel(true);
-    //TODO show model
-    dispatch(removeFavorite(item.idMeal!))
-    //appContext?.removeUserFav(item.idMeal!, () => setModel(false));
+    dispatch(removeFavorite(item.idMeal!));
   };
 
   if (!userFav || userFav.length === 0) {
@@ -55,7 +52,6 @@ function Favorite() {
             onRemove={onTileRemove}
           />
         )}></FlatList>
-      <LoadModel visible={model} />
     </VStack>
   );
 }

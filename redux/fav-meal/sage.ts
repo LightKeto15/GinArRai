@@ -1,30 +1,16 @@
 import MealAPI from '../../src/fetch/MealAPI';
-import {
-  call,
-  put,
-  select,
-  takeEvery,
-  takeLatest,
-  takeLeading,
-} from 'redux-saga/effects';
-import {
-  FavMealAction,
-  FavMealActionInterface,
-  FavMealActionType,
-} from './types';
+import {call, put, select, takeEvery} from 'redux-saga/effects';
+import {FavMealActionInterface, FavMealActionType} from './types';
 
-import {
-  addBatchFavorite,
-  addFavorite,
-  removeFavorite,
-  setLoading,
-} from './action';
+import {addBatchFavorite, setLoading} from './actions';
 import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
-import {getUID, getUser} from '../user/selector';
+import {getUID} from '../user/selectors';
 import {MealModel} from '../../src/model/MealModel';
-import {getFavorite, getFavoriteID, isFavorite} from './selectors';
+import {getFavoriteID} from './selectors';
+
+// Fetch user favorite meal by user id from firebase
 function* fetchByID(action: FavMealActionInterface) {
   yield put(setLoading(true));
   const udata: FirebaseFirestoreTypes.DocumentSnapshot<FirebaseFirestoreTypes.DocumentData> =
@@ -40,8 +26,9 @@ function* fetchByID(action: FavMealActionInterface) {
 export function* fechIDSaga() {
   yield takeEvery(FavMealActionType.FETCH_ID, fetchByID);
 }
+
+// Remove user favorite from meal ID
 function* removeFavDB(action: FavMealActionInterface) {
-  //let y = firestore().collection('Users').doc('uid');
   const uid: string = yield select(getUID);
   yield put(setLoading(true));
   const user: FirebaseFirestoreTypes.DocumentReference<FirebaseFirestoreTypes.DocumentData> =
@@ -59,7 +46,6 @@ function* removeFavDB(action: FavMealActionInterface) {
           nList.push(it);
         }
       }
-      //console.log(nList);
       return nList;
     }
   });
@@ -73,13 +59,11 @@ function* removeFavDB(action: FavMealActionInterface) {
 export function* removeFavSaga() {
   yield takeEvery(FavMealActionType.REMOVE_BY_ID_DB, removeFavDB);
 }
-
+// add user favorite from meal ID
 function* addFavDB(action: FavMealActionInterface) {
   const check: string[] = yield select(getFavoriteID);
   const uid: string = yield select(getUID);
-  //console.log('add1');
   if (!check.includes(action.payload.idMeal)) {
-    //yield call(() => console.log('add2'));
     const user: FirebaseFirestoreTypes.DocumentReference<FirebaseFirestoreTypes.DocumentData> =
       yield call(() => firestore().collection('Users').doc(uid));
     yield call(() => user.set({favList: [...check, action.payload.idMeal]}));
