@@ -1,29 +1,34 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {FlatList, Icon, Text, VStack} from 'native-base';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useDispatch, useSelector} from 'react-redux';
+import { removeFavorite } from '../../redux/fav-meal/action';
+import {getFavorite} from '../../redux/fav-meal/selectors';
 import {FavoriteItemTile} from '../components/FavoriteItemTile';
 import {LoadModel} from '../components/LoadModal';
 import {MealModel} from '../model/MealModel';
 import {AppFavRootStackParamList} from '../navigation/AppStack';
-import {AppContext} from '../provider/AppProvider';
+
 
 type FavNavProp = NavigationProp<AppFavRootStackParamList, 'Favorite'>;
 
 function Favorite() {
   const navigator = useNavigation<FavNavProp>();
-  const appContext = useContext(AppContext);
   const [model, setModel] = useState(false);
-
+  const userFav = useSelector(getFavorite);
+  const dispatch = useDispatch();
   const onTilePress = (item: MealModel) => {
     navigator.navigate('InstructionFav', {mealData: item});
   };
   const onTileRemove = (item: MealModel) => {
-    setModel(true);
-    appContext?.removeUserFav(item.idMeal!, () => setModel(false));
+    //setModel(true);
+    //TODO show model
+    dispatch(removeFavorite(item.idMeal!))
+    //appContext?.removeUserFav(item.idMeal!, () => setModel(false));
   };
 
-  if (!appContext?.userFav || appContext?.userFav.size == 0) {
+  if (!userFav || userFav.length === 0) {
     return (
       <VStack flex={1} justifyContent="center" alignItems={'center'}>
         <Icon
@@ -42,9 +47,7 @@ function Favorite() {
     <VStack flex={1}>
       <FlatList
         flex={1}
-        data={Array.from(appContext?.userFav!, ([name, value]) => {
-          return value;
-        })}
+        data={userFav}
         renderItem={({item}) => (
           <FavoriteItemTile
             item={item}

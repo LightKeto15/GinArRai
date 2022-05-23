@@ -11,49 +11,63 @@ import {MealModel} from './src/model/MealModel';
 import firestore from '@react-native-firebase/firestore';
 import {LoadModel} from './src/components/LoadModal';
 import {NativeBaseProvider} from 'native-base';
-import { theme } from './src/styles/Theme';
+import {theme} from './src/styles/Theme';
+import {Provider, useDispatch, useSelector} from 'react-redux';
+import configureStore, { runSaga } from './redux';
+import {
+  addBatchFavorite,
+  fetchByID,
+  removeAllFavorite,
+} from './redux/fav-meal/action';
+import {addUser} from './redux/user/actions';
+import {getUser} from './redux/user/selector';
+import {isLoading} from './redux/fav-meal/selectors';
 
 function MainApp() {
-  const appContext = useContext(AppContext);
+  const user = useSelector(getUser);
+  const modal = useSelector(isLoading);
+  const dispatch = useDispatch();
   const [initializing, setInitializing] = useState(true);
-  const [model, setModel] = useState(false);
 
   function onAuthStateChanged(userState: FirebaseAuthTypes.User | null) {
     if (!userState) {
-      appContext?.removelAllFav();
+      dispatch(removeAllFavorite());
     } else {
-      if (appContext) {
-        async function fetchAPI() {
-          try {
-            setModel(true);
-            console.log('being fetch...');
-            await firestore()
-              .collection('Users')
-              .doc('log')
-              .update({user: true});
-            const udata = await firestore()
-              .collection('Users')
-              .doc(userState!.uid)
-              .get();
-            let favList = udata.data()!['favList'] as Array<string>;
-            let nList = new Map<string, MealModel>();
+      console.log('being fetch...');
+      dispatch(fetchByID(userState!.uid));
+      //async function fetchAPI() {
+      //  try {
+      //setModel(true);
+
+      /*await firestore().collection('Users').doc('log').update({user: true});
+          const udata = await firestore()
+            .collection('Users')
+            .doc(userState!.uid)
+            .get();
+          let favList = udata.data()!['favList'] as Array<string>;
+          if (favList.length > 0) {
+            let nList = Array<MealModel>(); //new Map<string, MealModel>();
             await Promise.all(
               favList.map(async id => {
                 const fData = await MealAPI.getById(id);
-                nList.set((fData as MealModel).idMeal!, fData as MealModel);
+                nList.push(fData as MealModel);
+                //nList.set((fData as MealModel).idMeal!, fData as MealModel);
               }),
             );
-            appContext?.addUserFavBatch(nList);
-            console.log('done fetch...');
-            setModel(false);
-          } catch (error) {
-            console.log(error);
-          }
-        }
-        fetchAPI();
-      }
+            //appContext?.addUserFavBatch(nList);
+            console.log('1:fetch...');
+            dispatch(addBatchFavorite(nList));*/
+      console.log('done fetch...');
+      //}
+      //setModel(false);
+      //  } catch (error) {
+      //     console.log(error);
+      //  }
+      // }
+      // fetchAPI();
     }
-    appContext!.setUser(userState);
+    //appContext!.setUser(userState);
+    dispatch(addUser(userState));
     if (initializing) setInitializing(false);
   }
 
@@ -72,17 +86,19 @@ function MainApp() {
   return (
     <NativeBaseProvider theme={theme}>
       <NavigationContainer>
-        {appContext!.user ? <AppStack /> : <AuthStack />}
-        <LoadModel visible={model} />
+        {user ? <AppStack /> : <AuthStack />}
+        <LoadModel visible={modal} />
       </NavigationContainer>
     </NativeBaseProvider>
   );
 }
 
+const store = configureStore();
 export default function () {
+  runSaga()
   return (
-    <AppProvider>
+    <Provider store={store}>
       <MainApp />
-    </AppProvider>
+    </Provider>
   );
 }

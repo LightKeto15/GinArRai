@@ -2,15 +2,14 @@ import {Button, FormControl, Icon, Input, VStack} from 'native-base';
 import React, {useContext} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useDispatch} from 'react-redux';
+import {signInUser} from '../../redux/user/actions';
 import {AppContext} from '../provider/AppProvider';
 import {getErrorText} from '../Utility';
 
-interface PropError {
-  setErrorAuth: React.Dispatch<React.SetStateAction<string | null>>;
-}
 
-function SignInPanel(props: PropError) {
-  const appContext = useContext(AppContext);
+function SignInPanel() {
+  const dispatch = useDispatch();
   const [show, setShow] = React.useState(false);
   type FormType = {
     email: string;
@@ -27,10 +26,7 @@ function SignInPanel(props: PropError) {
     },
   });
   const onSubmit = async (data: FormType) => {
-    let result = await appContext?.SignIn(data.email, data.password)!;
-    if (result) {
-      props.setErrorAuth(result);
-    }
+    dispatch(signInUser(data.email, data.password)); //await appContext?.SignIn(data.email, data.password)!;
   };
   return (
     <VStack space={5}>

@@ -21,6 +21,8 @@ import React, {
 import {BackHandler, TouchableOpacity, useWindowDimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useDispatch} from 'react-redux';
+import {addFavorite} from '../../redux/fav-meal/action';
 import MealAPI from '../fetch/MealAPI';
 import {MealModel} from '../model/MealModel';
 import {
@@ -35,9 +37,10 @@ type MealDrawerProp = DrawerNavigationProp<AppDrawerParamList, 'HomeDrawer'>;
 function Meal() {
   const navigator = useNavigation<MealNavProp>();
   const draweragator = navigator.getParent<MealDrawerProp>();
-  const [data, setData] = useState<MealModel | null | string>(null);
-  const appContext = useContext(AppContext);
+  const [data, setData] = useState<MealModel | null>(null);
   const [fav, setFav] = useState(false);
+  const dispatch = useDispatch();
+
   useLayoutEffect(() => {
     draweragator.setOptions({
       title: '',
@@ -52,11 +55,12 @@ function Meal() {
       });
     };
   }, []);
+  
   const backAction = useCallback(() => {
     if (fav === true) {
       console.log(fav);
       try {
-        appContext?.addUserFav(data! as MealModel);
+        dispatch(addFavorite(data! as MealModel));
       } catch (e) {
         //Nothing..
       }
@@ -81,11 +85,10 @@ function Meal() {
   const {width} = useWindowDimensions();
   const onAgain = () => {
     if (fav) {
-      appContext?.addUserFav(data as MealModel);
-    } else {
-      setData(null);
-      setFetchData(!fetchData);
-    }
+      dispatch(addFavorite(data! as MealModel));
+    } 
+    setData(null);
+    setFetchData(!fetchData);
   };
 
   const onFavorite = () => {
@@ -95,6 +98,8 @@ function Meal() {
       setFav(true);
     }
   };
+
+  
   if (!data) {
     MealAPI.getRandom().then(data => {
       setData(data);
@@ -137,7 +142,7 @@ function Meal() {
           onPress={() => {
             navigator.goBack();
             if (fav) {
-              appContext?.addUserFav(data as MealModel);
+              dispatch(addFavorite(data! as MealModel));
             }
           }}
           style={{

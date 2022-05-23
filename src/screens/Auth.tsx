@@ -5,8 +5,13 @@ import {Keyboard, useWindowDimensions} from 'react-native';
 import SignInPanel from '../components/SignInPanel';
 import SignUpPanel from '../components/SignUpPanel';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useDispatch, useSelector} from 'react-redux';
+import {getUserAuthError} from '../../redux/user/selector';
+import {setUserAuthError} from '../../redux/user/actions';
 
 function Auth() {
+  const userAuthError = useSelector(getUserAuthError);
+  const dispatch = useDispatch();
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -29,7 +34,6 @@ function Auth() {
   }, []);
   const {height} = useWindowDimensions();
   const [type, setType] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   return (
     <KeyboardAwareScrollView style={{backgroundColor: '#e76f51'}}>
@@ -52,16 +56,12 @@ function Auth() {
           </Heading>
 
           <VStack flex={1} marginTop="5" marginX="50" space={5}>
-            {error ? (
+            {userAuthError ? (
               <Text color="#f00e0e" fontSize={18}>
-                {error}
+                {userAuthError}
               </Text>
             ) : null}
-            {type ? (
-              <SignInPanel setErrorAuth={setError} />
-            ) : (
-              <SignUpPanel setErrorAuth={setError} />
-            )}
+            {type ? <SignInPanel /> : <SignUpPanel />}
             <Box flex={1} alignItems="center">
               {!isKeyboardVisible ? (
                 <HStack flex={1} justifyContent="flex-end" alignItems="center">
@@ -76,7 +76,7 @@ function Auth() {
                     marginLeft={2}
                     onPress={() => {
                       setType(!type);
-                      setError(null);
+                      dispatch(setUserAuthError(null));
                     }}
                     textDecorationLine="underline">
                     {type ? 'Sign up' : 'Sign in'}

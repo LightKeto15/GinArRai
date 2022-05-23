@@ -4,7 +4,7 @@ import auth from '@react-native-firebase/auth';
 import {MealModel} from '../model/MealModel';
 import firestore from '@react-native-firebase/firestore';
 interface AppContextInterface {
-  user: FirebaseAuthTypes.User | null;
+  /*user: FirebaseAuthTypes.User | null;
   setUser: React.Dispatch<React.SetStateAction<FirebaseAuthTypes.User | null>>;
   SignIn: (email: string, password: string) => Promise<string | null>;
   SignOut: () => void;
@@ -14,9 +14,9 @@ interface AppContextInterface {
   addUserFavBatch: (batch: Map<string, MealModel>) => void;
   removeUserFav: (id: string, callBack: () => void) => void;
   removelAllFav: () => void;
-  isFavorite: (id: string) => boolean;
+  isFavorite: (id: string) => boolean;*/
   initUserData: boolean;
-  setInit: () => void;
+  //setInit: () => void;
 }
 
 export const AppContext = createContext<AppContextInterface | null>(null);
@@ -27,10 +27,10 @@ type Props = {
 export const AppProvider = ({children}: Props) => {
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
   const [init, setInit] = useState(false);
-  const [userFav, setUserFav] = useState<Map<string, MealModel> | null>(null);
-  const initAppContext: AppContextInterface = {
-    user: user,
-    initUserData: init,
+  //const [userFav, setUserFav] = useState<Map<string, MealModel> | null>(null);
+  const initAppContext: AppContextInterface = { initUserData: init,
+   /* user: user,
+   
     setUser: setUser,
     setInit() {
       setInit(true);
@@ -67,8 +67,8 @@ export const AppProvider = ({children}: Props) => {
         let authError = error as FirebaseAuthTypes.NativeFirebaseAuthError;
         return authError.message.replace(`[${authError.code}] `, '');
       }
-    },
-    userFav: userFav,
+    },*/
+    /*userFav: userFav,
     addUserFavBatch(batch) {
       setUserFav(batch);
     },
@@ -122,7 +122,7 @@ export const AppProvider = ({children}: Props) => {
         else return false;
       }
       return false;
-    },
+    }*/
   };
   return (
     <AppContext.Provider value={initAppContext}>{children}</AppContext.Provider>

@@ -2,6 +2,8 @@ import {Box, Button, FormControl, Icon, Input, VStack} from 'native-base';
 import React, {useContext} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useDispatch } from 'react-redux';
+import { signUpUser } from '../../redux/user/actions';
 import {AppContext} from '../provider/AppProvider';
 import {getErrorText} from '../Utility';
 
@@ -9,8 +11,9 @@ interface PropError {
   setErrorAuth: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-function SignUpPanel(props: PropError) {
-  const appContext = useContext(AppContext);
+function SignUpPanel() {
+  //const appContext = useContext(AppContext);
+  const dispatch = useDispatch()
   const [showP1, setP1] = React.useState(false);
   const [showP2, setP2] = React.useState(false);
   type FormType = {
@@ -34,10 +37,8 @@ function SignUpPanel(props: PropError) {
     if (data.password !== data.rePassword) {
       setError('password', {type: 'match'});
     } else {
-      let result = await appContext!.SignUp(data.email, data.password);
-      if (result) {
-        props.setErrorAuth(result);
-      }
+       //await appContext!.SignUp(data.email, data.password);
+       dispatch(signUpUser(data.email, data.password))
     }
   };
   return (

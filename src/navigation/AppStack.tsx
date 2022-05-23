@@ -15,6 +15,10 @@ import {Text, View} from 'react-native';
 import {AppContext} from '../provider/AppProvider';
 import {MealModel} from '../model/MealModel';
 import Instruction from '../screens/Instruction';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser } from '../../redux/user/selector';
+import { signOutUser } from '../../redux/user/actions';
+
 export type AppRootStackParamList = {
   Home: undefined;
   Meal: undefined;
@@ -61,8 +65,8 @@ export default function AppStack() {
     );
   };
   const CustomDrawerContent = (props: DrawerContentComponentProps) => {
-    const appContext = useContext(AppContext);
-
+    const user = useSelector(getUser);
+    const dispatch = useDispatch();
     return (
       <View style={{flex: 1}}>
         <View
@@ -73,7 +77,7 @@ export default function AppStack() {
             alignItems: 'flex-start',
           }}>
           <Text style={{fontSize: 18, color: 'white', marginLeft: '5%'}}>
-            {appContext?.user!.email}
+            {user!.email}
           </Text>
         </View>
         <DrawerContentScrollView style={{flex: 1}} {...props}>
@@ -89,7 +93,9 @@ export default function AppStack() {
               onPress={() => {
                 //props.navigation.navigate('HomeDrawer')
                 props.navigation.closeDrawer();
-                appContext?.SignOut();
+                //appContext?.SignOut();
+                //TODO sign out
+                dispatch(signOutUser())
               }}
             />
           </View>
