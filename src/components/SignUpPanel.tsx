@@ -4,7 +4,6 @@ import {Controller, useForm} from 'react-hook-form';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useDispatch } from 'react-redux';
 import { signUpUser } from '../../redux/user/actions';
-import {AppContext} from '../provider/AppProvider';
 import {getErrorText} from '../Utility';
 
 interface PropError {
@@ -12,7 +11,6 @@ interface PropError {
 }
 
 function SignUpPanel() {
-  //const appContext = useContext(AppContext);
   const dispatch = useDispatch()
   const [showP1, setP1] = React.useState(false);
   const [showP2, setP2] = React.useState(false);
@@ -37,7 +35,6 @@ function SignUpPanel() {
     if (data.password !== data.rePassword) {
       setError('password', {type: 'match'});
     } else {
-       //await appContext!.SignUp(data.email, data.password);
        dispatch(signUpUser(data.email, data.password))
     }
   };

@@ -25,6 +25,7 @@ function Instruction({route, navigation}: InstNavProp) {
   const [playing, setPlaying] = useState(false);
   const [tap, setTab] = useState(0);
 
+  // Hide title bar and show again when user leave this page.
   useLayoutEffect(() => {
     draweragator.setOptions({
       title: '',
@@ -48,6 +49,8 @@ function Instruction({route, navigation}: InstNavProp) {
       }
     };
   }, []);
+
+  //Youtube callback
   const onStateChange = useCallback(state => {
     if (state === 'ended') {
       setPlaying(false);

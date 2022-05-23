@@ -40,8 +40,6 @@ class MealAPI {
         nList.push(fData as MealModel);
       }),
     );
-    console.log(ids);
-    //console.log(nList);
     return nList;
   }
 }

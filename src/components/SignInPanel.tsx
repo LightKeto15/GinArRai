@@ -4,7 +4,6 @@ import {Controller, useForm} from 'react-hook-form';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch} from 'react-redux';
 import {signInUser} from '../../redux/user/actions';
-import {AppContext} from '../provider/AppProvider';
 import {getErrorText} from '../Utility';
 
 
@@ -26,7 +25,7 @@ function SignInPanel() {
     },
   });
   const onSubmit = async (data: FormType) => {
-    dispatch(signInUser(data.email, data.password)); //await appContext?.SignIn(data.email, data.password)!;
+    dispatch(signInUser(data.email, data.password));
   };
   return (
     <VStack space={5}>
